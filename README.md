@@ -1,57 +1,150 @@
-# Plant-Disease-Recognition-System
-Plant Disease Recognition System
+# 🌾 AI-Based Crop Disease Detection & Yield Prediction System
 
-# Model Setup Instructions
+## 🚀 Project Overview
 
-To use this project, you need to download a pre-trained model from the given Google Drive link and place it in the `models` directory. Follow the steps below to set it up correctly:
+This project is a full-stack AI-powered web application designed to assist farmers and agricultural stakeholders by providing:
 
-## Steps to Download and Place the Model
+* 🦠 **Crop Disease Detection** using Deep Learning (EfficientNet)
+* 📊 **Crop Yield Prediction** using Machine Learning (Lasso, Decision Tree Regressor)
 
-1. **Download the Model**
-   - Click [here](https://drive.google.com/file/d/1Ond7UzrNOfdAXWedjlZr2sDXYU6MRBuj/view?usp=sharing) to open the Google Drive link.
-   - Click the **Download** button to save the file to your local system.
+The system enables early disease identification and data-driven decision-making to improve agricultural productivity.
 
-2. **Create the Models Folder**
-   - Navigate to the root directory of this project.
-   - Create a folder named `models` if it does not already exist.
-     ```bash
-     mkdir models
-     ```
+---
 
-3. **Place the Model in the Folder**
-   - Move the downloaded file into the `models` directory.
-     ```bash
-     mv /path/to/downloaded/model models/
-     ```
-     Replace `/path/to/downloaded/model` with the actual path where you downloaded the file.
+## 🎯 Key Features
 
-4. **Verify the Setup**
-   - Ensure that the model file is correctly placed in the `models` directory by listing the folder's contents:
-     ```bash
-     ls models
-     ```
-     You should see the downloaded model file in the output.
+### 🦠 Disease Detection
 
-## Usage
+* Upload crop leaf images
+* Detect diseases using EfficientNet model
+* High accuracy image classification
 
-1. **Specify the Model File Location**
-   - Open the `app.py` file in a text editor.
-   - Locate line 8, which contains the following code:
-     ```python
-     tf.keras.models.load_model("")
-     ```
-   - Update the empty string with the relative path to the model file. For example:
-     ```python
-     tf.keras.models.load_model("models/your_model_file.keras")
-     ```
-     Replace `your_model_file.keras` with the actual name of the model file you downloaded.
+### 📊 Yield Prediction
 
-2. **Run the Server**
-   - Open a terminal and navigate to the root directory of this project.
-   - Run the following command to start the server:
-     ```bash
-     python app.py
-     ```
+* Predict yield based on:
 
-3. **Access the Application**
-   - Once the server is running, follow the instructions displayed in the terminal to access the application in your web browser.
+  * Temperature
+  * Rainfall
+  * Soil conditions
+  * Crop type
+* Uses Lasso Regression & Decision Tree Regressor
+
+### 🌐 User Interface
+
+* Simple and intuitive UI
+* Image upload support
+* Dropdown-based crop selection
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology                                    |
+| -------- | --------------------------------------------- |
+| Frontend | HTML, CSS, JavaScript                         |
+| Backend  | Python (Flask)                                |
+| ML/DL    | TensorFlow, Keras, Scikit-learn               |
+| Models   | EfficientNet, Lasso,  Decision Tree Regressor |
+
+---
+
+## 📸 Screenshots
+
+![Home](assets/home.png)
+![Disease Detection Module](assets/disease_detection_module.png)
+![Image upload](assets/image_upload.png)
+![Disease detection result](assets/disease_detection_result.png)
+![Yield prediction Module](assets/yield_prediction_module.png)
+![Yield data input](assets/yield_data_input.png)
+![Yield prediction result](assets/yield_prediction_result.png)
+
+Example:
+
+* Disease Detection Page
+* Yield Prediction Page
+* Output Results
+
+---
+
+## ⚙️ Installation & Setup
+
+```bash
+git clone https://github.com/your-username/Crop-Disease-Detection-and-Yield-Prediction.git
+cd Crop-Disease-Detection-and-Yield-Prediction
+```
+
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+python app.py
+```
+
+---
+
+## 📂 Model Files
+
+⚠️ Due to GitHub size limitations, trained models are not included.
+
+👉 Download models from:
+
+[here](https://drive.google.com/drive/folders/13GlLpLbDBxZPxQCODfUNY3FALXF51VJd?usp=drive_link)
+
+After downloading, place them inside:
+
+```
+models/
+```
+
+---
+
+## 📈 How It Works
+
+### Disease Detection
+
+1. User uploads leaf image
+2. Image is preprocessed
+3. EfficientNet model predicts disease class
+
+### Yield Prediction
+
+1. User inputs environmental parameters
+2. Data is processed
+3. ML model predicts expected yield
+
+---
+
+## 📊 Results
+
+* High accuracy in disease classification
+* Reliable yield prediction using ensemble methods
+
+---
+
+## ⚠️ Limitations
+
+* Limited to trained crops and diseases
+* Model performance depends on dataset quality
+* Requires internet/browser environment
+
+---
+
+## 🔮 Future Scope
+
+* Mobile application
+* Real-time weather API integration
+* More crop and disease coverage
+* Multilingual support for farmers
+
+---
+
+## 👨‍💻 Author
+
+**Mohd Faiz Ansari**
+
+---
+
+## ⭐ If you like this project
+
+Give it a star ⭐ on GitHub!
