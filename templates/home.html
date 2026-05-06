@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Disease Recognition</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="../static/images/logo.svg" type="image/svg+xml">
+
+    <!-- Google Font: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    >
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../static/css/style.css">
+    
+</head>
+<body>
+    <!-- Global AI Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay d-none">
+        <div class="loader-card text-center">
+            <div class="ai-spinner mb-3">
+                <div class="ai-spinner-core">
+                    <i class="bi bi-flower1"></i>
+                </div>
+                <div class="ai-spinner-ring"></div>
+            </div>
+            <h6 class="mb-2 fw-semibold text-uppercase small text-muted tracking-wide">AI Analysis in Progress</h6>
+            <p class="mb-2 fw-medium">Analyzing plant leaf using AI model...</p>
+            <p id="loadingStepMessage" class="mb-0 small text-muted">
+                Initializing model
+            </p>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg app-navbar">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#hero">
+                <i class="bi bi-flower1 me-2 app-brand-icon"></i>
+                <span class="fw-semibold">Smart Agriculture AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#hero">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#disease-detection">Disease Detection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#yield-prediction">Yield Prediction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Project</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section position-relative">
+        <div class="hero-overlay"></div>
+        <div class="container position-relative hero-content">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8 col-md-10">
+                    <h1 class="hero-title">
+                        Smart Agriculture AI System
+                    </h1>
+                    <p class="hero-subtitle">
+                        Upload a crop leaf image and our deep learning model will instantly detect crop diseases.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 mt-3">
+                        <a href="#disease-detection" class="btn btn-primary btn-lg hero-cta-btn">
+                            <i class="bi bi-cpu me-2"></i>
+                            Start Detection
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disease Detection Upload Section -->
+    <section id="disease-detection" class="py-5 app-section">
+        <div class="container">
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8 text-center">
+                    <h2 class="app-section-title">
+                        <i class="bi bi-cloud-arrow-up-fill me-2 text-primary"></i>
+                        Disease Detection
+                    </h2>
+                    <p class="app-section-subtitle">
+                        Upload a clear image of a crop leaf to run an instant disease check with our trained model.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="card app-card upload-card shadow-soft">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3 fw-semibold d-flex align-items-center">
+                                <i class="bi bi-file-earmark-image me-2 text-primary"></i>
+                                Upload Crop Leaf Image
+                            </h3>
+                            <form id="uploadForm" action="/upload/#disease-detection" method="POST" enctype="multipart/form-data"
+                              onsubmit="sessionStorage.setItem('formSubmitted', 'true'); sessionStorage.setItem('submittedSection', 'disease');">
+                                <!-- Hidden native file input (still used by Flask) -->
+                                <input
+                                    id="imageInput"
+                                    type="file"
+                                    name="img"
+                                    accept="image/png, image/jpeg, image/jpg"
+                                    class="d-none"
+                                    required
+                                >
+
+                                <!-- Drag & Drop Upload Box -->
+                                <div id="uploadBox" class="upload-box text-center">
+                                    <div id="uploadPlaceholder">
+                                        <div class="upload-icon mb-3">
+                                            <i class="bi bi-cloud-upload"></i>
+                                        </div>
+                                        <p class="mb-1 fw-medium upload-text-desktop">
+                                            Drag &amp; Drop Crop Leaf Image Here
+                                        </p>
+                                        <p class="mb-1 fw-medium upload-text-mobile">
+                                            Tap to upload crop image
+                                        </p>
+                                        <p class="text-muted small mb-0">
+                                            or click to browse
+                                        </p>
+                                        <p class="text-muted small mb-0">
+                                            Supported formats: JPG, PNG, JPEG
+                                        </p>
+                                    </div>
+
+                                    <!-- Image Preview -->
+                                    <div id="uploadPreviewWrapper" class="d-none mt-2">
+                                        <img id="imagePreview" class="preview-image" alt="Preview">
+                                    </div>
+                                </div>
+
+                                <!-- Error Message -->
+                                <div id="uploadError" class="text-danger small mt-2 d-none"></div>
+
+                                <!-- Loading Status -->
+                                <div id="loadingText" class="text-muted small mt-3 d-none">
+                                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                    Analyzing plant leaf using AI model...
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="d-grid mt-4">
+                                    <button
+                                        id="analyzeButton"
+                                        type="submit"
+                                        class="btn btn-success btn-lg app-primary-btn"
+                                    >
+                                        <i class="bi bi-search me-2"></i>
+                                        Analyze image
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prediction Result Section -->
+    {% if result %}
+    <section id="prediction-result" class="py-5 app-section bg-light-subtle fade-in-result">
+        <div class="container">
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8 text-center">
+                    <h2 class="app-section-title">
+                        <i class="bi bi-activity me-2 text-success"></i>
+                        Prediction Result
+                    </h2>
+                    <p class="app-section-subtitle">
+                        Review the detected disease along with a brief description and recommended treatment steps.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card app-card prediction-card shadow-soft">
+                        <div class="card-body">
+                            <div class="row g-4 align-items-center">
+                                <!-- Left: Image Preview -->
+                                <div class="col-md-5">
+                                    <div class="result-img-container text-center">
+                                        <img
+                                            src="{{imagepath}}"
+                                            alt="uploaded image"
+                                            class="img-fluid rounded result-image"
+                                        >
+                                    </div>
+                                </div>
+
+                                <!-- Right: Prediction Details -->
+                                <div class="col-md-7">
+                                    <div class="result-text">
+                                        <!-- Primary Prediction -->
+                                        <div class="primary-prediction mb-3">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <span class="badge bg-success-subtle text-success-emphasis primary-badge">
+                                                    <i class="bi bi-check-circle-fill me-1"></i>
+                                                    Primary Detection
+                                                </span>
+                                                <span class="small text-muted">
+                                                    Confidence:
+                                                    <strong>{{ primary_confidence|default(0, true) }}%</strong>
+                                                </span>
+                                            </div>
+                                            <h3 class="h5 mb-1 fw-bold">
+                                                {{prediction['name']}}
+                                            </h3>
+                                        </div>
+
+                                        <!-- Model Predictions List -->
+                                        <!-- Removed: Only showing single best prediction -->
+
+
+                                        <!-- Disease Information -->
+                                        <div class="disease-info mt-3">
+                                            <h6 class="fw-semibold mb-2">
+                                                <i class="bi bi-info-circle me-1 text-primary"></i>
+                                                Disease Information
+                                            </h6>
+                                            <p class="mb-2">
+                                                <strong>Disease:</strong>
+                                                {{prediction['name']}}
+                                            </p>
+                                            <p class="mb-2">
+                                                <strong>Short Description:</strong>
+                                                {{prediction['cause']}}
+                                            </p>
+                                            <p class="mb-0">
+                                                <strong>Suggested Treatment:</strong>
+                                                {{prediction['cure']}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- row -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Crop Yield Prediction Module -->
+    <section id="yield-prediction" class="py-5 app-section">
+        <div class="container">
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8 text-center">
+                    <h2 class="app-section-title">
+                        <i class="bi bi-graph-up-arrow me-2 text-warning"></i>
+                        Crop Yield Prediction
+                    </h2>
+                    <p class="app-section-subtitle">
+                        Predict crop yield using agricultural data and machine learning models.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-7 col-md-9">
+                    <div class="card app-card shadow-soft">
+                        <div class="card-body">
+                            <h3 class="h5 mb-4 fw-semibold d-flex align-items-center">
+                                <i class="bi bi-bar-chart-line me-2 text-warning"></i>
+                                Enter Agricultural Data
+                            </h3>
+
+                            <!-- Yield Prediction Form -->
+                            <form id="yieldForm" action="/predict#yield-prediction" method="POST" onsubmit="sessionStorage.setItem('formSubmitted', 'true'); sessionStorage.setItem('submittedSection', 'yield');">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="year" class="form-label fw-semibold">Year</label>
+                                        <input 
+                                            type="number" 
+                                            class="form-control" 
+                                            id="year" 
+                                            name="Year" 
+                                            placeholder="e.g., 2023"
+                                            value="{{ year or '' }}"
+                                            required
+                                        >
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="rainfall" class="form-label fw-semibold">Average Rainfall (mm/year)</label>
+                                        <input 
+                                            type="number" 
+                                            class="form-control" 
+                                            id="rainfall" 
+                                            name="average_rain_fall_mm_per_year" 
+                                            placeholder="e.g., 1000"
+                                            step="0.01"
+                                            value="{{ rainfall or '' }}"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="pesticides" class="form-label fw-semibold">Pesticides (Tonnes)</label>
+                                        <input 
+                                            type="number" 
+                                            class="form-control" 
+                                            id="pesticides" 
+                                            name="pesticides_tonnes" 
+                                            placeholder="e.g., 150"
+                                            step="0.01"
+                                            value="{{ pesticides or '' }}"
+                                            required
+                                        >
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="temperature" class="form-label fw-semibold">Average Temperature (°C)</label>
+                                        <input 
+                                            type="number" 
+                                            class="form-control" 
+                                            id="temperature" 
+                                            name="avg_temp" 
+                                            placeholder="e.g., 25.5"
+                                            step="0.01"
+                                            value="{{ temperature or '' }}"
+                                            required
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="area" class="form-label fw-semibold">Area / Country</label>
+                                        <select class="form-select" id="area" name="Area" required>
+                                            <option value="">Select Country</option>
+                                            {% for area in area_options %}
+                                            <option value="{{ area }}" {% if area == selected_area %}selected{% endif %}>{{ area }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="crop" class="form-label fw-semibold">Crop Type</label>
+                                        <select class="form-select" id="crop" name="Item" required>
+                                            <option value="">Select a crop...</option>
+                                            {% for item in item_options %}
+                                            <option value="{{ item }}" {% if item == selected_item %}selected{% endif %}>{{ item }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid mt-4">
+                                    <button 
+                                        type="submit" 
+                                        class="btn btn-warning btn-lg app-primary-btn"
+                                    >
+                                        <i class="bi bi-calculator me-2"></i>
+                                        Predict Yield
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Yield Prediction Result -->
+                            {% if yield_submitted %}
+                                {% if yield_prediction is not none %}
+                                    <div id="yield-result" class="alert alert-success mt-4" role="alert">
+                                        <div class="text-center">
+                                            <h5 class="alert-heading mb-3">
+                                                <i class="bi bi-check-circle-fill me-2"></i>
+                                                Prediction Complete
+                                            </h5>
+                                            <div class="yield-result-display">
+                                                <p class="mb-1 text-muted small">Predicted Yield</p>
+                                                <h2 class="fw-bold text-warning">{{ yield_prediction }} tons/hectare</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% elif yield_error %}
+                                    <div id="yield-result" class="alert alert-danger mt-4" role="alert">
+                                        <h5 class="alert-heading">
+                                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                            Error
+                                        </h5>
+                                        <p class="mb-0">{{ yield_error }}</p>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- About the Project Section -->
+    <section id="about" class="py-5 app-section bg-light-subtle fade-in-section fade-in-delay-1">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="app-section-title">
+                        <i class="bi bi-info-circle me-2 text-primary"></i>
+                        About the Project
+                    </h2>
+                    <p class="app-section-subtitle">
+                        <strong>Problem:</strong> Crop loss due to diseases and uncertain yield prediction affects agricultural efficiency.<br>
+                        <strong>Solution:</strong> A smart AI-based agriculture system that detects plant diseases using deep learning and predicts crop yield using machine learning models, helping farmers take timely actions and optimize productivity.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How the System Works Section -->
+    <section id="how-it-works" class="py-5 app-section fade-in-section fade-in-delay-2">
+        <div class="container">
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8 text-center">
+                    <h2 class="app-section-title">
+                        <i class="bi bi-diagram-3 me-2 text-primary"></i>
+                        How the System Works
+                    </h2>
+                    <p class="app-section-subtitle">
+                        The AI pipeline for plant disease detection:
+                    </p>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 system-pipeline">
+                        <div class="pipeline-step text-center">
+                            <div class="pipeline-icon mb-2"><i class="bi bi-image fs-2 text-primary"></i></div>
+                            <div class="fw-semibold">Leaf Image</div>
+                        </div>
+                        <div class="pipeline-arrow"><i class="bi bi-arrow-right fs-3 text-primary"></i></div>
+                        <div class="pipeline-step text-center">
+                            <div class="pipeline-icon mb-2"><i class="bi bi-sliders2 fs-2 text-success"></i></div>
+                            <div class="fw-semibold">Preprocessing</div>
+                        </div>
+                        <div class="pipeline-arrow"><i class="bi bi-arrow-right fs-3 text-primary"></i></div>
+                        <div class="pipeline-step text-center">
+                            <div class="pipeline-icon mb-2"><i class="bi bi-cpu fs-2 text-info"></i></div>
+                            <div class="fw-semibold">CNN Model</div>
+                        </div>
+                        <div class="pipeline-arrow"><i class="bi bi-arrow-right fs-3 text-primary"></i></div>
+                        <div class="pipeline-step text-center">
+                            <div class="pipeline-icon mb-2"><i class="bi bi-bar-chart-steps fs-2 text-warning"></i></div>
+                            <div class="fw-semibold">Prediction</div>
+                        </div>
+                        <div class="pipeline-arrow"><i class="bi bi-arrow-right fs-3 text-primary"></i></div>
+                        <div class="pipeline-step text-center">
+                            <div class="pipeline-icon mb-2"><i class="bi bi-display fs-2 text-accent"></i></div>
+                            <div class="fw-semibold">Result Display</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Stack Section -->
+    <section id="tech-stack" class="py-5 app-section bg-light-subtle fade-in-section fade-in-delay-3">
+        <div class="container">
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8 text-center">
+                    <h2 class="app-section-title">
+                        <i class="bi bi-tools me-2 text-primary"></i>
+                        Technology Stack
+                    </h2>
+                    <p class="app-section-subtitle">
+                        Built with modern AI and web technologies:
+                    </p>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 tech-icons">
+                        <div class="tech-item text-center">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" width="40" height="40">
+                            <div class="small mt-1">Python</div>
+                        </div>
+                        <div class="tech-item text-center">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg" alt="Flask" width="40" height="40">
+                            <div class="small mt-1">Flask</div>
+                        </div>
+                        <div class="tech-item text-center">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" alt="TensorFlow" width="40" height="40">
+                            <div class="small mt-1">TensorFlow/Keras</div>
+                        </div>
+                        <div class="tech-item text-center">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" width="40" height="40">
+                            <div class="small mt-1">HTML5</div>
+                        </div>
+                        <div class="tech-item text-center">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" width="40" height="40">
+                            <div class="small mt-1">CSS3</div>
+                        </div>
+                        <div class="tech-item text-center">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap" width="40" height="40">
+                            <div class="small mt-1">Bootstrap</div>
+                        </div>
+                        <div class="tech-item text-center">
+                            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript" width="40" height="40">
+                            <div class="small mt-1">JavaScript</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-5 app-section">
+        <div class="container">
+            <div class="row justify-content-center mb-4">
+                <div class="col-lg-8 text-center">
+                    <h2 class="app-section-title">
+                        <i class="bi bi-envelope-fill me-2 text-primary"></i>
+                        Contact
+                    </h2>
+                    <p class="app-section-subtitle">Get in touch with our project team.</p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10 text-center">
+                    <p class="result-text mb-2"><span class="fw-semibold">Project Team:</span> Smart Agriculture AI</p>
+                    <p class="result-text mb-0"><span class="fw-semibold">Email:</span> faizmohd481@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="app-footer py-4">
+        <div class="container text-center">
+            <p class="mb-0 app-footer-text">© 2026 Smart Agriculture AI System | Final Year ML Project</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+    <!-- Upload UI JS -->
+    <script src="../static/js/upload.js"></script>
+    <!-- Prediction progress bars JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.confidence-bar .progress-bar[data-confidence]').forEach(function (bar) {
+                var v = parseFloat(bar.getAttribute('data-confidence'));
+                if (!isFinite(v)) v = 0;
+                if (v < 0) v = 0;
+                if (v > 100) v = 100;
+                bar.style.width = v + '%';
+            });
+        });
+
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        window.addEventListener('load', function () {
+            const isFormSubmit = sessionStorage.getItem('formSubmitted') === 'true';
+            const submittedSection = sessionStorage.getItem('submittedSection');
+            const navEntry = performance.getEntriesByType('navigation')[0];
+            const isReload = (navEntry && navEntry.type === 'reload') ||
+                (performance.navigation && performance.navigation.type === 1);
+
+            if (isFormSubmit) {
+                const targetElement = submittedSection === 'yield'
+                    ? (document.getElementById('yield-result') || document.getElementById('yield-prediction'))
+                    : (document.getElementById('prediction-result') || document.getElementById('disease-detection'));
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                sessionStorage.removeItem('formSubmitted');
+                sessionStorage.removeItem('submittedSection');
+                return;
+            }
+
+            if (isReload) {
+                if (window.location.hash) {
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                }
+                window.scrollTo(0, 0);
+            }
+        });
+    </script>
+</section>
+</body>
+</html>
